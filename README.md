@@ -43,18 +43,31 @@ Swagger UI: /docs
 🗄️ Структура проекта
 requirements.txt
 src/
+
 ├── main.py            # Точка входа
+
 ├── database.py        # Настройки базы данных
+
 ├── models/            # Модели SQLAlchemy
+
 ├── schemas/           # Pydantic схемы
+
 ├── api/
+
 │   ├── endpoints/     # Роутеры API
+
 │   │   ├── auth.py    # Аутентификация
+
 │   │   ├── adverts.py # Объявления
+
 │   │   └── admin.py   # Админ-панель
+
 ├── core/              # Основные настройки
+
 │   ├── config.py      # Конфигурация
+
 │   └── security.py    # JWT-аутентификация
+
 └── services/          # Бизнес-логика
 
 ## 🔒 Аутентификация
