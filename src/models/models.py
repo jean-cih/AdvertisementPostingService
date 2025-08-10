@@ -1,10 +1,16 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-import datetime
+from sqlalchemy import ForeignKey
+from datetime import datetime
 from enum import Enum
 
 
 class Base(DeclarativeBase):
     pass
+
+
+class UserRole(str, Enum):
+    USER = "user"
+    ADMIN = "admin"
 
 
 class User(Base):
@@ -22,9 +28,10 @@ class User(Base):
     complaints: Mapped[list["Complaint"]] = relationship(back_populates="complainant")
 
 
-class UserRole(str, Enum):
-    USER = "user"
-    ADMIN = "admin"
+class AdvertType(str, Enum):
+    SALE = "sale"
+    PURCHASE = "purchase"
+    SERVICE = "service"
 
 
 class Advert(Base):
@@ -33,19 +40,13 @@ class Advert(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     content: Mapped[str]
-    type_advert: Mapped[Advert] = mapped_column(index=True) # 'sale', 'purchase', 'service'
+    type_advert: Mapped[AdvertType] = mapped_column(index=True) # 'sale', 'purchase', 'service'
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     owner: Mapped["User"] = relationship(back_populates="adverts")
     comments: Mapped[list["Comment"]] = relationship(back_populates="advert")
     complaints: Mapped[list["Complaint"]] = relationship(back_populates="advert")
-
-
-class Advert(str, Enum):
-    SALE = "sale"
-    PURCHASE = "purchase"
-    SERVICE = "service"
 
 
 class Comment(Base):

@@ -1,27 +1,31 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from src.models.models import Base
+from sqlalchemy.pool import NullPool
 
-load_dotenv()
+# Используем SQLite с асинхронным драйвером
+DATABASE_URL = "sqlite+aiosqlite:///./advertisement.db"
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+asyncpg://user:password@localhost/dbname"
-)
-
+# Настройки движка для SQLite
 engine = create_async_engine(
     DATABASE_URL,
-    echo=True,
-    poolclass=NullPool
-    )
+    echo=True,  # Логирование SQL-запросов
+    poolclass=NullPool,
+    connect_args={"check_same_thread": False}  # Важно для SQLite!
+)
 
+# Фабрика асинхронных сессий
+AsyncSessionLocal = async_sessionmaker(
+    bind=engine,
+    expire_on_commit=False,
+    autoflush=False
+)
 
-new_session = async_sessionmaker(engine, expire_on_commit=False)
-
-async def get_session()
-    async with new_session() as session:
+async def get_db() -> AsyncSession:
+    """Генератор сессий для Dependency Injection"""
+    async with AsyncSessionLocal() as session:
         try:
             yield session
-            await sessoin.commit()
+            await session.commit()
         except Exception:
             await session.rollback()
             raise

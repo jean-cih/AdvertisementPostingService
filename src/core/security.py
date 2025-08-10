@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException, Response, Depends, status
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from ..models import User
+from ..models.models import User
 from ..database import get_db
 from typing import Optional
 from datetime import datetime, timedelta
-import .config
+import core.config
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -33,7 +34,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 async def get_current_user(
     db: AsyncSession = Depends(get_db),
     token: str = Depends(oauth2_scheme)
-) -> User:
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

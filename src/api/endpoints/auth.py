@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from ..database import get_db
+from src.database import get_db
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordRequestForm
-from ..models import User
-from ..core.security import get_password_hash, create_access_token, authenticate_user
+from src.models.models import User
+from src.core.security import get_password_hash, create_access_token, authenticate_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -38,6 +38,7 @@ async def create_user(db: AsyncSession, user_data):
 @router.post("/register", response_model=Token)
 async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
     return await create_user(db, user)
+    return {"seccess": True, "message": "user is register"}
 
 
 @router.post("/login", response_model=Token)
