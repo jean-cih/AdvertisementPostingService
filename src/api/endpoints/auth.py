@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordRequestForm
 from ..models import User
+from ..core.security import get_password_hash, create_access_token, authenticate_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -42,4 +43,6 @@ async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
 @router.post("/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(),
                 db: AsyncSession = Depends(get_db)):
-    return await authenticate_user(db, form_data.username, form_data.password)
+    user = await authenticate_user(db, form_data.username, form_data.password)
+    access_token = create_access_token(data={"sub": user.username})
+    return {"seccess": True, "message": "user is login"}
