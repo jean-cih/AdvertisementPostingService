@@ -42,6 +42,7 @@ Swagger UI: /docs
 
 🗄️ Структура проекта
 requirements.txt
+
 src/
 
 ├── main.py            # Точка входа
@@ -54,19 +55,19 @@ src/
 
 ├── api/
 
-│   ├── endpoints/     # Роутеры API
+│     ├── endpoints/     # Роутеры API
 
-│   │   ├── auth.py    # Аутентификация
+│   │     ├── auth.py    # Аутентификация
 
-│   │   ├── adverts.py # Объявления
+│   │     ├── adverts.py # Объявления
 
-│   │   └── admin.py   # Админ-панель
+│   │     └── admin.py   # Админ-панель
 
 ├── core/              # Основные настройки
 
-│   ├── config.py      # Конфигурация
+│     ├── config.py      # Конфигурация
 
-│   └── security.py    # JWT-аутентификация
+│     └── security.py    # JWT-аутентификация
 
 └── services/          # Бизнес-логика
 
