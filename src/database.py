@@ -2,18 +2,16 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from src.models.models import Base
 from sqlalchemy.pool import NullPool
 
-# Используем SQLite с асинхронным драйвером
+
 DATABASE_URL = "sqlite+aiosqlite:///./advertisement.db"
 
-# Настройки движка для SQLite
 engine = create_async_engine(
     DATABASE_URL,
-    echo=True,  # Логирование SQL-запросов
+    echo=True, 
     poolclass=NullPool,
-    connect_args={"check_same_thread": False}  # Важно для SQLite!
+    connect_args={"check_same_thread": False}
 )
 
-# Фабрика асинхронных сессий
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     expire_on_commit=False,
@@ -21,7 +19,6 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 async def get_db() -> AsyncSession:
-    """Генератор сессий для Dependency Injection"""
     async with AsyncSessionLocal() as session:
         try:
             yield session
